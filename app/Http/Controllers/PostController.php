@@ -13,7 +13,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::paginate(20);
+        $posts = Post::published()->paginate(20);
 
         return response()->json($posts, 200);
     }
@@ -28,7 +28,7 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        if ($post->is_draft || is_null($post->published_at)) {
+        if (! $post->isPublished()) {
             return response()->json(['message' => 'Post not found'], 404);
         }
 
@@ -49,6 +49,6 @@ class PostController extends Controller
         $this->authorize('delete', $post);
         $post->delete();
 
-        return response()->json(['message' => 'Post deleted successfully'], 204);
+        return response()->json(['message' => 'Post deleted successfully'], 200);
     }
 }

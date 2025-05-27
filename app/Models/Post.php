@@ -17,4 +17,15 @@ class Post extends Model
         'is_draft',
         'published_at',
     ];
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_draft', false)
+            ->whereNotNull('published_at');
+    }
+
+    public function isPublished()
+    {
+        return ! $this->is_draft && ! is_null($this->published_at);
+    }
 }

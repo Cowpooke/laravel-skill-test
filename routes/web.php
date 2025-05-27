@@ -8,13 +8,15 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::get('/posts', [PostController::class, 'index']);
-Route::get('/posts/{post}', [PostController::class, 'show']);
+Route::controller(PostController::class)->group(function () {
+    Route::get('/posts', 'index');
+    Route::get('/posts/{post}', 'show');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::post('/posts', [PostController::class, 'store']);
-    Route::put('/posts/{post}', [PostController::class, 'update']);
-    Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::post('/posts', 'store');
+        Route::put('/posts/{post}', 'update');
+        Route::delete('/posts/{post}', 'destroy');
+    });
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
